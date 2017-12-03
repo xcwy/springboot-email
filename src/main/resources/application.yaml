@@ -2,8 +2,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: your email address
-    password: your email password
+    username: your gmail acount
+    password: gmail password
     properties:
       mail:
         smtp:
@@ -11,3 +11,9 @@ spring:
           starttls:
             enable: true
             required: true
+  activemq:
+    in-memory: true
+    pool:
+      enabled: false
+    packages:
+      trust-all: true

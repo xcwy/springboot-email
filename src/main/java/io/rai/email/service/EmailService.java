@@ -29,7 +29,7 @@ public class EmailService {
   /**
    * 发送邮件
    */
-  public void send(Email email) throws Exception {
+  public void send(Email email) {
     log.info("Enter.");
     if (CollectionUtils.isEmpty(email.getAttachments())) {
       log.info("Simple email");
@@ -43,7 +43,7 @@ public class EmailService {
   /**
    * 发送普通的文字邮件
    */
-  private void sendSimpleMail(Email email) throws Exception {
+  private void sendSimpleMail(Email email) {
 
     SimpleMailMessage message = new SimpleMailMessage();
 
@@ -61,25 +61,29 @@ public class EmailService {
   /**
    * 发送带附件的邮件
    */
-  private void sendAttachmentsMail(Email email) throws Exception {
+  private void sendAttachmentsMail(Email email) {
 
     MimeMessage mimeMessage = mailSender.createMimeMessage();
+    try {
 
-    MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
-    helper.setFrom(email.getSender());
-    helper.setTo(email.getAddressee());
-    helper.setSubject(email.getSubject());
-    helper.setText(email.getText());
-    if (!CollectionUtils.isEmpty(email.getCc())) {
-      helper.setCc(email.getCc().toArray(new String[email.getCc().size()]));
+      MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+      helper.setFrom(email.getSender());
+      helper.setTo(email.getAddressee());
+      helper.setSubject(email.getSubject());
+      helper.setText(email.getText());
+      if (!CollectionUtils.isEmpty(email.getCc())) {
+        helper.setCc(email.getCc().toArray(new String[email.getCc().size()]));
+      }
+
+      // TODO: 2017/12/3 add attachment
+      FileSystemResource file = new FileSystemResource(new File("logo.png"));
+      helper.addAttachment("附件-1.jpg", file);
+      helper.addAttachment("附件-2.jpg", file);
+
+      mailSender.send(mimeMessage);
+    } catch (Exception ex) {
+      log.info("Something wrong when send email");
     }
-
-    // TODO: 2017/12/3 add attachment 
-    FileSystemResource file = new FileSystemResource(new File("logo.png"));
-    helper.addAttachment("附件-1.jpg", file);
-    helper.addAttachment("附件-2.jpg", file);
-
-    mailSender.send(mimeMessage);
   }
 
 

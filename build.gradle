@@ -26,6 +26,8 @@ dependencies {
 
     compile("org.springframework.boot:spring-boot-starter-mail")
 
+    compile("org.springframework.boot:spring-boot-starter-activemq")
+
     // Common tool like: StringUtils
     compile('org.apache.commons:commons-lang3:3.4')
 
